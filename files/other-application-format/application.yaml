@@ -1,0 +1,19 @@
+spring:
+  liquibase:
+    change-log: classpath:db/changelog/changelog-master.yaml
+  data:
+    rest:
+      basePath: /api
+  jackson:
+    mapper:
+      accept_case_insensitive_properties: true
+      accept_case_insensitive_enums: true
+
+identrics:
+  employee:
+    importing:
+      watch-location: src/main/resources/watch
+      watch-poll-interval-seconds: 10
+      watch-quiet-period-seconds: 5
+    search:
+      default-order-dir: asc

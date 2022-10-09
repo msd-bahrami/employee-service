@@ -1,0 +1,4 @@
+# TODO Add proper index
+databaseChangeLog:
+  - include:
+      file: db/changelog/create-employee-table.sql

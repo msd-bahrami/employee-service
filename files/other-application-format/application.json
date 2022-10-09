@@ -1,0 +1,10 @@
+{
+  "spring.liquibase.change-log" : "classpath:db/changelog/changelog-master.yaml",
+  "spring.data.rest.basePath": "/api",
+  "spring.jackson.mapper.accept_case_insensitive_properties": "true",
+  "spring.jackson.mapper.accept_case_insensitive_enums": "true",
+  "identrics.employee.search.default-order-dir": "desc",
+  "identrics.employee.importing.watch-location": "C:\\Users\\ROG\\Desktop\\test-work\\employee-service\\src\\main\\resources\\watch",
+  "identrics.employee.importing.watch-poll-interval-seconds": "10",
+  "identrics.employee.importing.watch-quiet-period-seconds": "5"
+}

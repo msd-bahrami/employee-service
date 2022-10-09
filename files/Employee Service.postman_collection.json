@@ -1,0 +1,80 @@
+{
+	"info": {
+		"_postman_id": "6acc2d2e-e346-490d-8c7a-7dbe0065d805",
+		"name": "Employee Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9979008"
+	},
+	"item": [
+		{
+			"name": "search",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"aggregator\": \"OR\",\r\n    \"filters\": [\r\n        {\r\n            \"key\": \"name\",\r\n            \"operation\": \"EQUAL\",\r\n            \"value\": \"John\"\r\n        },\r\n        {\r\n            \"key\": \"salary\",\r\n            \"operation\": \"LESS_THAN\",\r\n            \"value\": \"3000\"\r\n        }\r\n    ],\r\n    \"page\": 0,\r\n    \"size\": 4,\r\n    \"orderBy\": \"name\",\r\n    \"orderDir\": \"acs\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employees-search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employees-search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "export",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "text/csv,  application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"aggregator\": \"AND\",\r\n    \"filters\": [\r\n        {\r\n            \"key\": \"name\",\r\n            \"operation\": \"EQUAL\",\r\n            \"value\": \"John\"\r\n        },\r\n        {\r\n            \"key\": \"salary\",\r\n            \"operation\": \"LESS_THAN\",\r\n            \"value\": \"3000\"\r\n        }\r\n    ],\r\n    \"page\": 0,\r\n    \"size\": 10,\r\n    \"orderBy\": \"name\",\r\n    \"orderDir\": \"acs\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/employees-search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"employees-search"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -1,0 +1,4 @@
+org.springframework.boot.env.PropertySourceLoader=\
+    net.identrics.employeeservice.config.JsonPropertySourceLoader, \
+    net.identrics.employeeservice.config.IniPropertySourceLoader, \
+    net.identrics.employeeservice.config.TomlPropertySourceLoader
