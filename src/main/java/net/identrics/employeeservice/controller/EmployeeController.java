@@ -1,9 +1,12 @@
 package net.identrics.employeeservice.controller;
 
+import lombok.AllArgsConstructor;
 import net.identrics.employeeservice.controller.model.PageDto;
 import net.identrics.employeeservice.entity.Employee;
 import net.identrics.employeeservice.service.EmployeeService;
 import net.identrics.employeeservice.service.search.SearchCriteria;
+import net.identrics.employeeservice.service.search.SearchService;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -20,19 +23,18 @@ import java.nio.charset.StandardCharsets;
  */
 @RestController
 @RequestMapping(EmployeeController.EMPLOYEES_SEARCH_PATH)
+@AllArgsConstructor
 public class EmployeeController {
 
     public static final String CSV_CONTENT_TYPE = "text/csv";
     public static final String EMPLOYEES_SEARCH_PATH = "/api/employees-search";
     private final EmployeeService employeeService;
-
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
+    @Qualifier("employeeSearchService")
+    private final SearchService<Employee> employeeSearchService;
 
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public PageDto<Employee> search(@RequestBody @Validated SearchCriteria searchCriteria) {
-        return new PageDto<>(employeeService.search(searchCriteria));
+        return new PageDto<>(employeeSearchService.search(searchCriteria));
     }
 
     // TODO: 10/7/2022 A performance issue for huge page size exist

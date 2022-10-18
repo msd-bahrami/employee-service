@@ -4,6 +4,7 @@ import net.identrics.employeeservice.TestData;
 import net.identrics.employeeservice.config.EmployeeServiceProperties;
 import net.identrics.employeeservice.entity.Employee;
 import net.identrics.employeeservice.repository.EmployeeRepository;
+import net.identrics.employeeservice.service.search.SearchService;
 import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -20,6 +20,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.io.IOException;
 import java.util.List;
 
+import static net.identrics.employeeservice.config.EmployeeServiceProperties.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -30,7 +31,6 @@ import static org.mockito.Mockito.when;
 class EmployeeServiceTest {
 
     @InjectMocks
-    @Spy
     EmployeeService employeeService;
 
     @Mock
@@ -38,6 +38,9 @@ class EmployeeServiceTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     EmployeeServiceProperties employeeServiceProperties;
+
+    @Mock
+    SearchService<Employee> searchService;
 
     @Mock
     Page<Employee> page;
@@ -63,14 +66,14 @@ class EmployeeServiceTest {
     void when_exportSearch_then_shouldReturnCsvContentWithHeaders() throws IOException {
         Employee employee = TestData.employee();
         when(page.getContent()).thenReturn(List.of(employee));
-        doReturn(page).when(employeeService).search(any());
+        doReturn(page).when(searchService).search(any());
 
         String result = employeeService.exportSearch(TestData.searchEmptyCriteria());
 
-        assertThat(result, CoreMatchers.containsString(EmployeeService.NAME_FIELD_NAME));
-        assertThat(result, CoreMatchers.containsString(EmployeeService.COMPANY_FIELD_NAME));
-        assertThat(result, CoreMatchers.containsString(EmployeeService.SALARY_FIELD_NAME));
-        assertThat(result, CoreMatchers.containsString(EmployeeService.EDUCATION_FIELD_NAME));
+        assertThat(result, CoreMatchers.containsString(NAME_FIELD_NAME));
+        assertThat(result, CoreMatchers.containsString(COMPANY_FIELD_NAME));
+        assertThat(result, CoreMatchers.containsString(SALARY_FIELD_NAME));
+        assertThat(result, CoreMatchers.containsString(EDUCATION_FIELD_NAME));
     }
 
     @Test
@@ -78,7 +81,7 @@ class EmployeeServiceTest {
     void given_criteriaHasResult_when_exportSearch_then_shouldReturnCsvContentCorrectRecords() throws IOException {
         Employee employee = TestData.employee();
         when(page.getContent()).thenReturn(List.of(employee));
-        doReturn(page).when(employeeService).search(any());
+        doReturn(page).when(searchService).search(any());
 
         String result = employeeService.exportSearch(TestData.searchEmptyCriteria());
 

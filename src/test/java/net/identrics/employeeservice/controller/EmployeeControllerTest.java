@@ -5,35 +5,36 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import net.identrics.employeeservice.TestData;
+import net.identrics.employeeservice.config.BeanConfig;
 import net.identrics.employeeservice.entity.Employee;
 import net.identrics.employeeservice.service.EmployeeService;
+import net.identrics.employeeservice.service.search.SearchService;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.io.IOException;
 import java.util.List;
 
 import static net.identrics.employeeservice.controller.EmployeeController.CSV_CONTENT_TYPE;
 import static net.identrics.employeeservice.controller.EmployeeController.EMPLOYEES_SEARCH_PATH;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(controllers = EmployeeController.class)
+@Import(BeanConfig.class)
 class EmployeeControllerTest {
 
     public static final String SAMPLE_CSV = "\"name\",\"company\",\"education\",\"salary\"\n" +
@@ -42,6 +43,9 @@ class EmployeeControllerTest {
 
     @MockBean
     EmployeeService employeeService;
+
+    @MockBean
+    SearchService<Employee> employeeSearchService;
 
     @Mock
     Page<Employee> page;
@@ -62,7 +66,7 @@ class EmployeeControllerTest {
     void given_validCriteria_when_search_then_shouldReturnResult() throws Exception {
         Employee expectedEmployee = TestData.employee();
         when(page.getContent()).thenReturn(List.of(expectedEmployee));
-        when(employeeService.search(any())).thenReturn(page);
+        when(employeeSearchService.search(any())).thenReturn(page);
 
         mockMvc.perform(post(EMPLOYEES_SEARCH_PATH)
                         .content(toJsonString(TestData.searchEmptyCriteria()))
